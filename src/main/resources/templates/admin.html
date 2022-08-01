@@ -4,14 +4,12 @@
     <title>Spring Security Example</title>
 </head>
 <body>
-<h1>User, welcome spring boot security page!</h1>
-<div>
-        <h1 th:text="${userDescription}"></h1>
-</div>
+<h1>ADMIN, welcome spring boot security page!</h1>
+
+<a href="/admin/users"/>Get a list of all users</a>
 
 <form th:action="@{/logout}" method="post">
     <button type="submit">Sign Out</button>
 </form>
-
 </body>
 </html>
