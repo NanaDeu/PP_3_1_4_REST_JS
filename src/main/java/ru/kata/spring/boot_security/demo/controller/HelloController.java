@@ -33,8 +33,6 @@ public class HelloController {
     public String pageForUser(Principal principal, ModelMap model) {
         User user = userService.findUserByName(principal.getName());
         model.addAttribute("userDescription", user.toString());
-
         return "user";
     }
-
 }

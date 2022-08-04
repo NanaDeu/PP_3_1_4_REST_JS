@@ -12,7 +12,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/admin/users")
-public class UserController {
+public class AdminController {
     private UserService userService;
 
     @Autowired
@@ -31,7 +31,7 @@ public class UserController {
     public String addUserForm(ModelMap model) {
         model.addAttribute("user", new User());
         model.addAttribute("listRoles", userService.listRoles());
-        return "/new";
+        return "new";
     }
 
     @PostMapping()

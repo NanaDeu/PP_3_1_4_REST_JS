@@ -16,8 +16,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Service
-public class UserDetailsServiceImpl implements UserDetailsService {
-    //задача по имени польз предоставить юзера
+public class UserDetailsServiceImpl implements UserDetailsService {    //задача по имени польз предоставить юзера
 
     private final UserRepository userRepository;
 
@@ -33,7 +32,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (user == null) throw new UsernameNotFoundException(String.format("User '%s' not found", username));
 
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-        for (Role role : user.getRoles()){
+        for (Role role : user.getRoles()) {
             grantedAuthorities.add(new SimpleGrantedAuthority(role.getName()));
         }
 
