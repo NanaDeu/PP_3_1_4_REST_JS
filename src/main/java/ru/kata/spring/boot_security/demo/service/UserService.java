@@ -16,7 +16,7 @@ public interface UserService {
 
     List<User> getAllUsers();
 
-    User findUserByName(String name);
+    User findUserByUsername(String username);
 
     List<Role> listRoles();
 

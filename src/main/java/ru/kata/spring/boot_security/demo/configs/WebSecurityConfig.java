@@ -7,8 +7,12 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import ru.kata.spring.boot_security.demo.service.UserDetailsServiceImpl;
 
 import javax.sql.DataSource;
@@ -34,7 +38,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/", "/index").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin().successHandler(successUserHandler)
+                .formLogin()
+                //.loginPage("")
+                //.loginProcessingUrl("login.html")
+                .successHandler(successUserHandler)
                 .permitAll()
                 .and()
                 .logout()
@@ -56,7 +63,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     // аутентификация inMemory
-    /*    @Bean
+/*    @Bean
     @Override
     public UserDetailsService userDetailsService() {
         UserDetails user =
@@ -69,6 +76,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 User.builder()
                         .username("admin")
                         .password("{bcrypt}$2a$12$HZRl1dypT9fJiNJnmgTYAOZr8bfaShGlcj8x/IqTsvRsztvff8bZK")
+                        //.password("admin")
                         .roles("ADMIN", "USER") //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                         .build();
         return new InMemoryUserDetailsManager(user, admin);

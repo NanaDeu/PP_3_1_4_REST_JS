@@ -8,10 +8,11 @@ import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
-@RequestMapping("/admin/users")
+@RequestMapping("/admin")
 public class AdminController {
     private UserService userService;
 
@@ -21,11 +22,54 @@ public class AdminController {
     }
 
     @GetMapping()
+    public String pageForAdmin(Principal principal, ModelMap model) {
+        User user = userService.findUserByUsername(principal.getName());
+        model.addAttribute("user", user);
+
+        model.addAttribute("userList", userService.getAllUsers());
+
+        //new
+        model.addAttribute("newUser", new User());
+        model.addAttribute("listRoles", userService.listRoles());
+
+        return "admin";
+    }
+    @PostMapping()
+    public String addUser(@ModelAttribute("newUser") User newUser) {
+        userService.save(newUser);
+        return "redirect:/admin";
+    }
+
+    @DeleteMapping("/{id}")
+    public String delete(@PathVariable("id") int id) {
+        userService.removeUserById(id);
+        return "redirect:/admin";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String updateUser(@PathVariable("id") int id, Model model) {
+        model.addAttribute("editUser", userService.getUserById(id));
+        model.addAttribute("listRoles", userService.listRoles());
+        return "admin";
+    }
+
+    @PatchMapping("/edit/{id}")
+    public String updateUser(@ModelAttribute("editUser") User user, @PathVariable("id") int id) {
+        userService.updateUser(id, user);
+        return "admin";
+    }
+
+/*    @Controller
+    @RequestMapping("/admin/users")
+    public class AdminController*/
+
+   /* @GetMapping()
     public String printUsers(ModelMap model) {
         List<User> list = userService.getAllUsers();
         model.addAttribute("userList", list);
         return "/users";
     }
+
 
     @GetMapping("/new")
     public String addUserForm(ModelMap model) {
@@ -37,7 +81,7 @@ public class AdminController {
     @PostMapping()
     public String addUser(@ModelAttribute("user") User user) {
         userService.save(user);
-        return "redirect:/admin/users";
+        return "redirect:/admin";
     }
 
     @GetMapping("/edit/{id}")
@@ -57,6 +101,6 @@ public class AdminController {
     public String delete(@PathVariable("id") int id) {
         userService.removeUserById(id);
         return "redirect:/admin/users";
-    }
+    }*/
 
 }
