@@ -32,8 +32,13 @@ public class AdminController {
         model.addAttribute("newUser", new User());
         model.addAttribute("listRoles", userService.listRoles());
 
+        //edit
+/*        model.addAttribute("editUser", userService.getUserById(id));
+        model.addAttribute("listRoles", userService.listRoles());*/
+
         return "admin";
     }
+
     @PostMapping()
     public String addUser(@ModelAttribute("newUser") User newUser) {
         userService.save(newUser);
@@ -46,18 +51,19 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @GetMapping("/edit/{id}")
-    public String updateUser(@PathVariable("id") int id, Model model) {
+/*    @GetMapping("/edit")
+    @ResponseBody
+    public String updateUser(long id, Model model) {
         model.addAttribute("editUser", userService.getUserById(id));
         model.addAttribute("listRoles", userService.listRoles());
-        return "admin";
+        return "redirect:/admin";
     }
 
-    @PatchMapping("/edit/{id}")
-    public String updateUser(@ModelAttribute("editUser") User user, @PathVariable("id") int id) {
+    @PatchMapping("/edit")
+    public String updateUser(@ModelAttribute("editUser") User user, long id) {
         userService.updateUser(id, user);
-        return "admin";
-    }
+        return "redirect:/admin";
+    }*/
 
 /*    @Controller
     @RequestMapping("/admin/users")
