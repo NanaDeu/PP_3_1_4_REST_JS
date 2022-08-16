@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+>
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -11,47 +12,80 @@
           integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
 
     <title>Spring Security Example</title>
-
 </head>
 
 <body>
-<h1>User, welcome spring boot security page!</h1>
-<div>
-    <h1 th:text="${userDescription}"></h1>
+<nav class="navbar navbar-expand-lg navbar-light bg-dark ">
+  <span class="navbar-text text-light">
+      <div class="d-flex align-items-center">
+        <text class="font-weight-bold m-1" th:text="${user.username} "></text>
+          <text class="m-1">with roles:</text>
+          <text th:text=" ${user.roles}"></text>
 </div>
-<table class="table table-striped">
-    <thead>
-    <tr>
-        <th scope="col">#</th>
-        <th scope="col">First</th>
-        <th scope="col">Last</th>
-        <th scope="col">Handle</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <th scope="row">1</th>
-        <td>Mark</td>
-        <td>Otto</td>
-        <td>@mdo</td>
-    </tr>
-    <tr>
-        <th scope="row">2</th>
-        <td>Jacob</td>
-        <td>Thornton</td>
-        <td>@fat</td>
-    </tr>
-    <tr>
-        <th scope="row">3</th>
-        <td>Larry</td>
-        <td>the Bird</td>
-        <td>@twitter</td>
-    </tr>
-    </tbody>
-</table>
-<form th:action="@{/logout}" method="post">
-    <button type="submit">Sign Out</button>
-</form>
+</span>
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+        </li>
+    </ul>
+    <form th:action="@{/logout}" method="post">
+        <button type="submit" class="btn btn-dark text-secondary ">Logout</button>
+    </form>
+</nav>
+<div class="container-fluid">
+    <div class="row">
+        <!--       Левая панель user        -->
+        <div class="col-2">
+            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <a class="nav-link active" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile"
+                   role="tab"
+                   aria-controls="v-pills-profile" aria-selected="false">User</a>
+            </div>
+        </div>
+        <!--       Правая панель user        -->
+        <div class="col-10 bg-light">
+            <div class="tab-content" id="v-pills-tabContent">
+                <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel"
+                     aria-labelledby="v-pills-home-tab">
+                    <!--    USER panel   -->
+                    <h1>User information-page</h1>
+                    <div class="card">
+                        <div class="card-header h5">
+                            About user
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text"></p>
+                            <div th:object="${user}">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">ID</th>
+                                        <th scope="col">First Name</th>
+                                        <th scope="col">Last Name</th>
+                                        <th scope="col">Age</th>
+                                        <th scope="col">Email</th>
+                                        <th scope="col">Role</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td th:text="${user.id}"></td>
+                                        <td th:text="${user.name}"></td>
+                                        <td th:text="${user.lastName}"></td>
+                                        <td th:utext="${user.age}">...</td>
+                                        <td th:text="${user.username}"></td>
+                                        <td th:text="${user.roles}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
