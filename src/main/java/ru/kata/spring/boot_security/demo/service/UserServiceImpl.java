@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
-import ru.kata.spring.boot_security.demo.service.repository.RoleRepository;
-import ru.kata.spring.boot_security.demo.service.repository.UserRepository;
+import ru.kata.spring.boot_security.demo.repository.RoleRepository;
+import ru.kata.spring.boot_security.demo.repository.UserRepository;
 
 import java.util.List;
 
@@ -31,6 +31,10 @@ public class UserServiceImpl implements UserService {
         return userRepository.getOne(id);
     }
 */
+    @Override
+    public User update(User user){
+        return userRepository.saveAndFlush(user);
+    }
 
     @Override
     public User updateUser(long id, User user) {

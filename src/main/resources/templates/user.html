@@ -13,27 +13,19 @@
 
     <title>Spring Security Example</title>
 </head>
-
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-dark ">
-  <span class="navbar-text text-light">
-      <div class="d-flex align-items-center">
-        <text class="font-weight-bold m-1" th:text="${user.username} "></text>
-          <text class="m-1">with roles:</text>
-          <text th:text=" ${user.roles}"></text>
-</div>
-</span>
-    <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-        </li>
-    </ul>
-    <form th:action="@{/logout}" method="post">
-        <button type="submit" class="btn btn-dark text-secondary ">Logout</button>
-    </form>
+<nav class="navbar navbar-light bg-dark text-white">
+    <div class="float-left">
+        <!--for JavaScript-->
+        <p class="my-auto" id="userHeader"></p>
+    </div>
+    <div class="float-right">
+        <a class="nav-link text-right text-secondary my-auto" href="/logout">Logout</a>
+    </div>
 </nav>
-<div class="container-fluid">
+<div class="container-fluid p-3">
     <div class="row">
-        <!--       Левая панель user        -->
+        <!--       Left panel on User page        -->
         <div class="col-2">
             <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                 <a class="nav-link active" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile"
@@ -41,7 +33,7 @@
                    aria-controls="v-pills-profile" aria-selected="false">User</a>
             </div>
         </div>
-        <!--       Правая панель user        -->
+        <!--       Right panel on User page        -->
         <div class="col-10 bg-light">
             <div class="tab-content" id="v-pills-tabContent">
                 <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel"
@@ -54,7 +46,7 @@
                         </div>
                         <div class="card-body">
                             <p class="card-text"></p>
-                            <div th:object="${user}">
+                            <div>
                                 <table class="table table-striped">
                                     <thead>
                                     <tr>
@@ -66,15 +58,8 @@
                                         <th scope="col">Role</th>
                                     </tr>
                                     </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td th:text="${user.id}"></td>
-                                        <td th:text="${user.name}"></td>
-                                        <td th:text="${user.lastName}"></td>
-                                        <td th:utext="${user.age}">...</td>
-                                        <td th:text="${user.username}"></td>
-                                        <td th:text="${user.roles}"></td>
-                                    </tr>
+                                    <!--for JavaScript-->
+                                    <tbody id="userTable">
                                     </tbody>
                                 </table>
                             </div>
@@ -86,13 +71,12 @@
     </div>
 </div>
 
-
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
         crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
         crossorigin="anonymous"></script>
-
+<script src="userJS.js"></script>
 </body>
 </html>

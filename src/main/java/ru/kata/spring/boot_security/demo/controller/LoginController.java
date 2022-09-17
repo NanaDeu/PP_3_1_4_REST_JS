@@ -4,13 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
-import java.security.Principal;
-
 @Controller
-public class HelloController {
+public class LoginController {
     private UserService userService;
 
     @Autowired
@@ -23,10 +20,13 @@ public class HelloController {
         return "login";
     }
 
+    @GetMapping("/admin")
+    public String pageForAdmin() {
+        return "admin";
+    }
+
     @GetMapping("/user")
-    public String pageForUser(Principal principal, ModelMap model) {
-        User user = userService.findUserByUsername(principal.getName());
-        model.addAttribute("user", user);
+    public String pageForUser() {
         return "user";
     }
 }
