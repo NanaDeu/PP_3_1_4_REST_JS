@@ -44,7 +44,7 @@
                     <h1>Admin panel</h1>
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
+                            <a class="nav-link active" id="userTableButton" data-toggle="tab" href="#home" role="tab"
                                aria-controls="home" aria-selected="true">Users table</a>
                         </li>
                         <li class="nav-item" role="presentation">
@@ -109,7 +109,7 @@
                                                                         First name</label>
                                                                     <input type="text" class="form-control"
                                                                            placeholder="First name"
-                                                                           id="editName">
+                                                                           id="editName" required>
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label for="lastName"
@@ -117,21 +117,21 @@
                                                                         name</label>
                                                                     <input type="text" class="form-control"
                                                                            placeholder="Last name"
-                                                                           id="editLastName">
+                                                                           id="editLastName" required>
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label for="age"
                                                                            class="font-weight-bold col text-center">Age</label>
                                                                     <input type="number" class="form-control"
                                                                            placeholder="Age"
-                                                                           id="editAge">
+                                                                           id="editAge" required>
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label for="username"
                                                                            class="font-weight-bold col text-center">Email</label>
                                                                     <input type="email" class="form-control"
                                                                            placeholder="Email"
-                                                                           id="editUsername">
+                                                                           id="editUsername" required>
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label for="password"
@@ -149,7 +149,7 @@
                                                                 </div>
                                                                 <div class="modal-footer modal-body">
                                                                     <button type="button" class="btn btn-secondary"
-                                                                            data-dismiss="modal">Close
+                                                                            id="editClose" data-dismiss="modal">Close
                                                                     </button>
                                                                     <button type="submit" class="btn btn-primary">
                                                                         Edit
@@ -224,7 +224,7 @@
                                                                 </fieldset>
                                                                 <div class="modal-footer">
                                                                     <button type="button" class="btn btn-secondary"
-                                                                            data-dismiss="modal">
+                                                                            id="deleteClose" data-dismiss="modal">
                                                                         Close
                                                                     </button>
                                                                     <button type="submit" value="Delete"
@@ -255,31 +255,31 @@
                                             <label for="name" class="font-weight-bold col text-center">
                                                 First name</label>
                                             <input type="text" class="form-control" id="name"
-                                                   placeholder="First name">
+                                                   placeholder="First name" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="lastName" class="font-weight-bold col text-center">
                                                 Last name</label>
                                             <input type="text" class="form-control" id="lastName"
-                                                   placeholder="Last name">
+                                                   placeholder="Last name" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="age"
                                                    class="font-weight-bold col text-center">Age</label>
                                             <input type="number" class="form-control" id="age"
-                                                   placeholder="Age">
+                                                   placeholder="Age" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="username"
                                                    class="font-weight-bold col text-center">Email</label>
                                             <input type="email" class="form-control"
-                                                   id="username" placeholder="Email">
+                                                   id="username" placeholder="Email" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="password"
                                                    class="font-weight-bold col text-center">Password</label>
                                             <input type="password" class="form-control"
-                                                   id="password" placeholder="Password">
+                                                   id="password" placeholder="Password" required>
                                         </div>
                                         <div class="form-group">
                                             <label class="font-weight-bold col text-center">Role</label>

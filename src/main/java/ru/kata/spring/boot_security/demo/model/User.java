@@ -46,8 +46,8 @@ public class User implements UserDetails {
     }
 
     public void setPassword(String password) {
-        this.password = WebSecurityConfig.passwordEncoder().encode(password);
-        //this.password=password;
+        //this.password = WebSecurityConfig.passwordEncoder().encode(password);
+        this.password = password;
     }
 
     @Override

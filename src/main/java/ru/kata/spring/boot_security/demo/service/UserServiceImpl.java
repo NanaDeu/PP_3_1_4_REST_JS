@@ -2,6 +2,7 @@ package ru.kata.spring.boot_security.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.kata.spring.boot_security.demo.configs.WebSecurityConfig;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repository.RoleRepository;
@@ -26,23 +27,31 @@ public class UserServiceImpl implements UserService {
     public User getUserById(long id) {
         return userRepository.findById(id).get();
     }
-/*
-    public User getUserById(long id) {
-        return userRepository.getOne(id);
-    }
-*/
+
+    /*
+        public User getUserById(long id) {
+            return userRepository.getOne(id);
+        }
+    */
     @Override
-    public User update(User user){
+    public User update(User user) {
         return userRepository.saveAndFlush(user);
     }
 
     @Override
     public User updateUser(long id, User user) {
-        return userRepository.saveAndFlush(user);
+        if (user.getPassword().isEmpty() || user.getPassword() == null) {
+            user.setPassword(userRepository.findById(user.getId()).get().getPassword());
+        } else {
+            user.setPassword(WebSecurityConfig.passwordEncoder().encode(user.getPassword()));
+        }
+        return userRepository.save(user);
+        // return userRepository.saveAndFlush(user);
     }
 
     @Override
     public User save(User user) {
+        user.setPassword(WebSecurityConfig.passwordEncoder().encode(user.getPassword()));
         return userRepository.save(user);
     }
 

@@ -14,7 +14,6 @@ let userDescription = () => {
             adminHeader.innerHTML = `
                     <p class="d-inline font-weight-bold">${user.username} </p>
                     <p class="d-inline"> with roles: ${roles}</p>`
-
             userDescriptionTable.innerHTML = `
                     <tr>
                         <td> ${user.id} </td>
@@ -31,20 +30,29 @@ userDescription();
 
 //For "Admin" button
 //------------- ALL USERS ---------------
-const adminPageUsersTable = document.getElementById("adminPageUsersTable");
-const renderUsers = (users) => {
-    if (users.length > 0) {
-        let output = '';
-        users.forEach((user) => {
-            let roles = user.roles.map(role => role.name);
-            output += `
+$(async function () {
+    await getAllUsers();
+});
+
+async function getAllUsers() {
+    const adminPageUsersTable = $('#adminPageUsersTable').empty();
+    fetch("http://localhost:8080/api/users", {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => response.json())
+        .then(users => {
+            users.forEach((user) => {
+                let output = `$(
                 <tr>
                     <td>${user.id}</td>
                     <td>${user.name}</td>
                     <td>${user.lastName}</td>
                     <td>${user.age}</td>
                     <td>${user.username}</td>
-                    <td>${roles}</td>
+                    <td>${user.roles.map(role => role.name)}</td>
                     <td>
                         <!-- trigger-button for modal window EDIT-->
                         <button type="button" class="btn btn-sm bg-info text-white" data-toggle="modal"
@@ -59,27 +67,12 @@ const renderUsers = (users) => {
                             Delete
                         </button>
                     </td>
-                </tr>
+                </tr>)
         `
-        })
-        adminPageUsersTable.innerHTML = output;
-    }
-}
-
-function getAllUsers() {
-    fetch("http://localhost:8080/api/users", {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-        .then(response => response.json())
-        .then(data => {
-            renderUsers(data);
+                adminPageUsersTable.append(output)
+            })
         })
 }
-
-getAllUsers();
 
 // from Spanish video
 const on = (element, event, selector, handler) => {
@@ -91,22 +84,9 @@ const on = (element, event, selector, handler) => {
 }
 
 //------------- EDIT ---------------
-// Putting the list of roles into options for EDIT
-const editRolesOptions = document.getElementById("editRoles");
-const editRoles = (roles) => {
-    if (roles.length > 0) {
-        let output = '';
-        roles.forEach((role) => {
-            output += `
-                 <option value="${role.id}">${role.name}</option>
-        `
-        })
-        editRolesOptions.innerHTML = output;
-    }
-}
-
 //Function to get roles from DB
 function getAllEditRoles() {
+    const editRolesOptions = document.getElementById("editRoles");
     fetch("http://localhost:8080/api/roles", {
         method: 'GET',
         headers: {
@@ -114,8 +94,16 @@ function getAllEditRoles() {
         }
     })
         .then(response => response.json())
-        .then(data => {
-            editRoles(data);
+        .then(roles => {
+            if (roles.length > 0) {
+                let output = '';
+                roles.forEach((role) => {
+                    output += `
+                 <option value="${role.id}">${role.name}</option>
+        `
+                })
+                editRolesOptions.innerHTML = output
+            }
         })
 }
 
@@ -133,30 +121,61 @@ on(document, 'click', '#editButton', e => {
     $("#editModal").modal("show")
 })
 
-const editUserForm = document.querySelector('#editModal')
-editUserForm.addEventListener('submit', (e) => {
-    fetch("http://localhost:8080/api/users/" + document.getElementById('editId').value, {
-        method: 'PUT', headers: {
-            'Content-Type': 'application/json'
-        }, body: JSON.stringify({
-            id: document.getElementById('editId').value,
-            name: document.getElementById('editName').value,
-            lastName: document.getElementById('editLastName').value,
-            age: document.getElementById('editAge').value,
-            username: document.getElementById('editUsername').value,
-            password: document.getElementById('editPassword').value,
-            roles: [{id: document.getElementById('editRoles').value}]
-        })
-    })
-        .then(response => response.json())
-        .then(() => location.reload())
+$(async function () {
+    editUser();
+});
 
-    $("#editModal").modal("hide")
-})
+function editUser() {
+    const editUserForm = document.querySelector('#editModal');
+
+    /*function getUpdateUser() {
+        if (document.getElementById('editPassword').value === null || document.getElementById('editPassword').value === "") {
+            return {
+                id: document.getElementById('editId').value,
+                name: document.getElementById('editName').value,
+                lastName: document.getElementById('editLastName').value,
+                age: document.getElementById('editAge').value,
+                username: document.getElementById('editUsername').value,
+                roles: [{id: document.getElementById('editRoles').value}]
+            }
+        } else {
+            return {
+                id: document.getElementById('editId').value,
+                name: document.getElementById('editName').value,
+                lastName: document.getElementById('editLastName').value,
+                age: document.getElementById('editAge').value,
+                username: document.getElementById('editUsername').value,
+                password: document.getElementById('editPassword').value,
+                roles: [{id: document.getElementById('editRoles').value}]
+            }
+        }
+    }*/
+
+    editUserForm.addEventListener('submit', async e => {
+        e.preventDefault()
+        await fetch("http://localhost:8080/api/users/" + document.getElementById('editId').value, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            }, body: JSON.stringify({
+                id: document.getElementById('editId').value,
+                name: document.getElementById('editName').value,
+                lastName: document.getElementById('editLastName').value,
+                age: document.getElementById('editAge').value,
+                username: document.getElementById('editUsername').value,
+                password: document.getElementById('editPassword').value,
+                roles: [{id: document.getElementById('editRoles').value}]
+            })
+        })
+            .then(() => {
+                $("#editModal").modal("hide")
+                getAllUsers()
+            })
+    })
+}
 
 //------------- DELETE ---------------
 on(document, 'click', '#deleteButton', e => {
-    const deleteUserForm = document.querySelector('#deleteModal')
     const fila2 = e.target.parentNode.parentNode
 
     document.getElementById('deleteId').value = fila2.children[0].innerHTML
@@ -167,34 +186,30 @@ on(document, 'click', '#deleteButton', e => {
     document.getElementById('deleteRolesOptions').text = fila2.children[5].innerHTML //text not value
 
     $("#deleteModal").modal("show")
+})
 
-    deleteUserForm.addEventListener('submit', (e) => {
+$(async function () {
+    deleteUser();
+});
 
+function deleteUser() {
+    const deleteUserForm = document.querySelector('#deleteModal');
+    deleteUserForm.addEventListener('submit', async e => {
+        e.preventDefault();
         fetch('http://localhost:8080/api/users/' + document.getElementById('deleteId').value, {
             method: 'DELETE'
         })
-            .then(res => res.json())
-            .then(() => location.reload())
+            .then(() => {
+                $("#deleteModal").modal("hide")
+                getAllUsers()
+            })
     })
-})
+}
 
 //------------- NEW USER ---------------
 // Getting the list of roles into options for new user form
-const allRoles = document.getElementById("roles");
-const roles = (roles) => {
-    if (roles.length > 0) {
-        let output = '';
-        roles.forEach((role) => {
-            output += `
-                 <option value="${role.id}">${role.name}</option>
-        `
-        })
-        allRoles.innerHTML = output;
-    }
-}
-
-// Adding roles
 function getAllRoles() {
+    const allRoles = document.getElementById("roles");
     fetch("http://localhost:8080/api/roles", {
         method: 'GET',
         headers: {
@@ -202,57 +217,47 @@ function getAllRoles() {
         }
     })
         .then(res => res.json())
-        .then(data => {
-            roles(data);
+        .then(roles => {
+            if (roles.length > 0) {
+                let output = '';
+                roles.forEach((role) => {
+                    output += `
+                 <option value="${role.id}">${role.name}</option>
+        `
+                })
+                allRoles.innerHTML = output
+            }
         })
 }
 
-document.getElementById('roles').value = getAllRoles()
+document.getElementById('roles').value = getAllRoles();
 
-//const addNewUser = document.querySelector('#profile')
-//const addNewUser = document.forms["addNewUser"]
-const addNewUser = document.querySelector('#addNewUser')
-addNewUser.addEventListener('submit', (e) => {
-    fetch("http://localhost:8080/api/users", {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            name: document.getElementById('name').value,
-            lastName: document.getElementById('lastName').value,
-            age: document.getElementById('age').value,
-            username: document.getElementById('username').value,
-            password: document.getElementById('password').value,
-            roles: [{id: document.getElementById('roles').value}]
+$(async function () {
+    await addNewUser();
+});
+
+async function addNewUser() {
+    const addNewUser = document.querySelector('#addNewUser');
+    addNewUser.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        fetch("http://localhost:8080/api/users", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: document.getElementById('name').value,
+                lastName: document.getElementById('lastName').value,
+                age: document.getElementById('age').value,
+                username: document.getElementById('username').value,
+                password: document.getElementById('password').value,
+                roles: [{id: document.getElementById('roles').value}]
+            })
         })
+            .then(() => {
+                addNewUser.reset()
+                getAllUsers()
+                $('#userTableButton').click()
+            })
     })
-        .then(response => response.json())
-        .then(data => {
-            const dataArr = [];
-            dataArr.push(data);
-            renderUsers(dataArr);
-        })
-})
-
-/*
-    .then(response => response.json())
-
-    .then(data => {
-        const dataArr = [];
-        dataArr.push(data);
-        renderUsers(dataArr);
-    })
-
-    .then(data => {
-        renderUsers(data)
-    })
-
-    .then(() => location.reload())
-
-    .then(data => {
-        const dataArr = [];
-        dataArr.push(data);
-        renderUsers(dataArr);
-    })
-*/
+}
